@@ -1,6 +1,4 @@
-# Portfolio projects
-
-## who i am
+# who i am
 Hello! :raised_hand_with_fingers_splayed:, I am Bruno, I am an IT engineer and i studied at the University of Santiago de Chile, and I also have an MBA in data science at the University of São Paulo.
 
 In my jobs i level up my skils with experience in diferents business area, i am professional with experience in data analysis, knowledge of indicators, dashboards, databases, statistics, data visibility, and execution of corporate strategies. 
@@ -17,6 +15,7 @@ That's the boring part, but, it allows me to meet people in this world of data t
 :bowtie:
 > What to expect from all this? Different projects that we can apply data analysis techniques, cleaning of data models and some results analysis or data dashboard, so, let`s GO!!
 
+# Portfolio projects
 
 ### ETL projects
 
