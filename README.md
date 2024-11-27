@@ -19,6 +19,7 @@ That's the boring part, but, it allows me to meet people in this world of data t
 
 ### ETL projects
 
+
 ### Model projects
 
 ### Analytics projects
