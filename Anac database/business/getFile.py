@@ -10,7 +10,7 @@ from io import BytesIO
 
 def fileExists(url,fileName):
     
-    caminho_salvar = "C:/Users/bruno.droguett/Downloads/"+fileName
+    caminho_salvar = "schnaiide/Downloads/"+fileName
 
     try:
         # Criar diretório se não existir
@@ -32,14 +32,17 @@ def fileExists(url,fileName):
         return caminho_salvar
     except requests.exceptions.RequestException as e:
         print(f"Erro ao baixar: {e}")
-        return caminho_salvar
+        return None
     except Exception as e:
         print(f"Erro: {e}")
-        return caminho_salvar
+        return None
     
     
-def readFile(url):
-    caminho_zip = fileExists(url,'fileName.zip')
+def readFile(url,fileName):
+    caminho_zip = fileExists(url,fileName)
+    if caminho_zip is None:
+        return None
+
     if not os.path.exists(caminho_zip):
             print("Arquivo ZIP não encontrado.")
             return None

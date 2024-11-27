@@ -13,9 +13,9 @@ baseURL = 'https://www.gov.br/anac/pt-br/assuntos/regulados/empresas-aereas/Inst
 listProcessFiles = []
 listProcessFiles.append(fc.connClass(
                         urlBase = baseURL
-                        ,period = (date.today() + relativedelta(months=-2)).strftime("%Y-%m")
-                        ,year = (date.today() + relativedelta(months=-2)).strftime("%Y")
-                        ,fullPath = baseURL +  (date.today() + relativedelta(months=-2)).strftime("%Y") +'/basica'+ (date.today() + relativedelta(months=-2)).strftime("%Y-%m") + '.zip')
+                        ,period = date.today().strftime("%Y-%m")
+                        ,year = date.today().strftime("%Y")
+                        ,fullPath = baseURL +  date.today().strftime("%Y") +'/basica'+ date.today().strftime("%Y-%m") + '.zip')
 )
 listProcessFiles.append(fc.connClass(
                         urlBase = baseURL
@@ -25,8 +25,8 @@ listProcessFiles.append(fc.connClass(
 )
 
 for files in listProcessFiles:
-    df = getFile.readFile(files.fullPath)
-    if not df.empty:
+    df = getFile.readFile(files.fullPath, f"basica_{files.period}.zip")
+    if df is not None and not df.empty:
         print(files.fullPath)
         break
 
