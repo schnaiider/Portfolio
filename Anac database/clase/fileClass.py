@@ -1,8 +1,7 @@
-
 from dataclasses import dataclass
 
 @dataclass
-class processFiles:
+class connClass:
     urlBase: str
     period: str
     year: int
@@ -10,4 +9,3 @@ class processFiles:
     
     def __str__(self):
         return f"{self.fullPath}"
-    
