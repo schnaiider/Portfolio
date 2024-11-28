@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from sqlalchemy import create_engine,text
 from snowflake.sqlalchemy import URL
 
+
 @dataclass
 class AzureSQLDatabase:
     server: str
@@ -37,3 +38,13 @@ class AzureSQLDatabase:
             self.conn.close()
             self.conn = None
             print("Conexão fechada!")
+
+    def blkInsert(self, tabela: str, dfInsert: any):
+        try:
+            self.conn.execute(text(f"DROP TABLE IF EXISTS ANACBR.{tabela}"))
+            dfInsert.to_sql(tabela, self.conn, schema="ANACBR", if_exists='replace', index=False)
+            print("Inserção bem-sucedida!")
+        except Exception as e:
+            print(f"Erro: {e}")
+        finally:
+            self.connectClose()

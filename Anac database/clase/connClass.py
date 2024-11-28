@@ -14,9 +14,9 @@ class authClass:
 def get_auth_data():
     return {
         "server": "zd49589.east-us-2.azure",
-        "database": "smartkargo",
+        "database": "SANDBOX_AZULCARGO",
         "username": "bruno.droguett@voeazul.com.br",
-        "schema": "ad_ods",
+        "schema": "ANACBR",
         "warehouse": "AZULCARGO_WH",
         "role": "AZULCARGO_USERS",
         "authenticator": "externalbrowser"

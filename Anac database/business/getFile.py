@@ -4,7 +4,6 @@ import zipfile
 import requests
 import tqdm
 import os
-from io import BytesIO
 
 
 
@@ -66,7 +65,6 @@ def readFile(url,fileName):
                                 delimiter=';', 
                                 quotechar='"', 
                                 encoding='latin1')
-                print(f"DataFrame criado com sucesso: {df.head()}")
                 return df
     
     except zipfile.BadZipFile as e:
