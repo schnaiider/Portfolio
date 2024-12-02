@@ -7,3 +7,4 @@ class company:
     sg_empresa_iata: str
     nm_empresa: str
     nm_pais: str
+    ds_tipo_empresa: str
