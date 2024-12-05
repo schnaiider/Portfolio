@@ -1,34 +1,35 @@
 import pandas as pd
 from datetime import date
 
-from Project.models import  company, identifierDigit, lineType , plane, airport
+from ..models import  company, identifierDigit, lineType , plane, airport
 
 
 
 def rawDims(df: pd.DataFrame):
-# get  raw dim´s
+    # get  raw dim´s
     dfCompanyGroup = df.groupby(['id_empresa', 'sg_empresa_icao', 'sg_empresa_iata', 'nm_empresa', 'nm_pais', 'ds_tipo_empresa']).size().reset_index()
-    companys = [company.company(*row[1:]) for row in dfCompanyGroup.itertuples(index=False)]
+    companys = [company.company(row.id_empresa, row.sg_empresa_icao,row.sg_empresa_iata,row.nm_empresa,row.nm_pais,row.ds_tipo_empresa) for row in dfCompanyGroup.itertuples(index=False)]
     dfCompany = pd.DataFrame([c.__dict__ for c in companys])
 
+
     dfCodIdentiGroup = df.groupby(['id_di','cd_di','ds_di','ds_grupo_di']).size().reset_index()
-    codIentity = [identifierDigit.diModel(row.id_di, row.cd_di, row.ds_di, row.ds_grupo_di) for row in dfCodIdentiGroup.itertuples(index=False)]
+    codIentity = [identifierDigit.diModel(row.id_di, str(row.cd_di), str(row.ds_di), str(row.ds_grupo_di)) for row in dfCodIdentiGroup.itertuples(index=False)]
     dfDigitIndent = pd.DataFrame([c.__dict__ for c in codIentity])
 
     dfTypeLineGroup = df.groupby(['id_tipo_linha','cd_tipo_linha','ds_tipo_linha','ds_natureza_tipo_linha','ds_servico_tipo_linha','ds_natureza_etapa','ds_tipo_empresa']).size().reset_index()
-    typeLine = [lineType.lineType(*row[1:]) for row in dfTypeLineGroup.itertuples(index=False)]
+    typeLine = [lineType.lineType(row.id_tipo_linha,row.cd_tipo_linha,row.ds_tipo_linha,row.ds_natureza_tipo_linha,row.ds_servico_tipo_linha,row.ds_natureza_etapa,row.ds_tipo_empresa) for row in dfTypeLineGroup.itertuples(index=False)]
     dfTypeLine = pd.DataFrame([c.__dict__ for c in typeLine])
 
     dfPlaneGroup = df.groupby(['id_equipamento','sg_equipamento_icao','ds_modelo','ds_matricula']).size().reset_index()
-    planes = [plane.plane(*row[1:]) for row in dfPlaneGroup.itertuples(index=False)]
+    planes = [plane.plane(row.id_equipamento,row.sg_equipamento_icao,row.ds_modelo,row.ds_matricula) for row in dfPlaneGroup.itertuples(index=False)]
     dfPlane = pd.DataFrame([c.__dict__ for c in planes])
 
     dfAirportOrigGroup = df.groupby(['id_aerodromo_origem','sg_icao_origem','sg_iata_origem','nm_aerodromo_origem','nm_municipio_origem','sg_uf_origem','nm_regiao_origem','nm_pais_origem','nm_continente_origem']).size().reset_index()
-    origin = [airport.airport(*row[1:]) for row in dfAirportOrigGroup.itertuples(index=False)]
+    origin = [airport.airport(row.id_aerodromo_origem,row.sg_icao_origem,row.sg_iata_origem,row.nm_aerodromo_origem,row.nm_municipio_origem,row.sg_uf_origem,row.nm_regiao_origem,row.nm_pais_origem,row.nm_continente_origem) for row in dfAirportOrigGroup.itertuples(index=False)]
     dfOrigin = pd.DataFrame([c.__dict__ for c in origin])
 
     dfAirportDestGroup = df.groupby(['id_aerodromo_destino','sg_icao_destino','sg_iata_destino','nm_aerodromo_destino','nm_municipio_destino','sg_uf_destino','nm_regiao_destino','nm_pais_destino','nm_continente_destino']).size().reset_index()
-    destination = [airport.airport(*row[1:]) for row in dfAirportDestGroup.itertuples(index=False)]
+    destination = [airport.airport(row.id_aerodromo_destino,row.sg_icao_destino,row.sg_iata_destino,row.nm_aerodromo_destino,row.nm_municipio_destino,row.sg_uf_destino,row.nm_regiao_destino,row.nm_pais_destino,row.nm_continente_destino) for row in dfAirportDestGroup.itertuples(index=False)]
     dfDestination = pd.DataFrame([c.__dict__ for c in destination])
     
     dfAirports = pd.concat([dfOrigin, dfDestination]).drop_duplicates()

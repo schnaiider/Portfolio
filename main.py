@@ -12,3 +12,5 @@ rawsDims = {'rawCompany': dfCompany,'rawTypeLine': dfTypeLine,'rawPlane': dfPlan
 
 for tableName, dfInser in rawsDims.items():
     rawInsert.insertRaws(tableName, dfInser)
+
+rawInsert.closeConn()

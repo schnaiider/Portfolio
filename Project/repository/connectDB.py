@@ -1,3 +1,4 @@
+
 from contextlib import contextmanager
 import pyodbc
 from sqlalchemy import create_engine,text
@@ -5,15 +6,19 @@ from snowflake.sqlalchemy import URL
 from Project.services import readCFG as cfg
 
 config = cfg.readCFG()
-
+_conn = None
 
 @contextmanager
 def dbConnect():
-    conn = createConnection()
+    global _conn
+    if _conn is None:
+        _conn = createConnection()
     try:
-        yield conn
+        yield _conn
+    except Exception as e:
+        print(f"Erro: {e}")
     finally:
-        closeConnection(conn)
+        pass
 
 def createConnection():
     try:
@@ -22,10 +27,12 @@ def createConnection():
         return engine.connect()
     except pyodbc.Error as e:
             print(f"Erro de conexão: {e}")
-def closeConnection(conn):
+def closeConnection():
+    global _conn
     try:
-        if conn:
-            conn.close()
+        if _conn:
+            _conn.close()
+            _conn = None
             print("Conexão fechada!")
     except Exception as e:
         print(f"Erro ao fechar conexão: {e}")
@@ -36,7 +43,12 @@ def executeQuery(query: str):
         return resultados
     
 def blkInsert(tabela: str, dfInsert: any):
-    with dbConnect() as conn:
-        conn.execute(text(f"DROP TABLE IF EXISTS ANACBR.{tabela}"))
-        dfInsert.to_sql(tabela, conn, schema="ANACBR", if_exists='replace', index=False)
-        print("Inserção bem-sucedida!")
+    try:
+        with dbConnect() as conn:
+            tabela_formatada = f'{tabela.replace("'",'').upper()}'
+            conn.execute(text(f"DROP TABLE IF EXISTS ANACBR.{tabela}"))
+            dfInsert.to_sql(tabela_formatada, conn, schema="ANACBR", if_exists='replace', index=False)
+            conn.commit()
+            print("Inserção bem-sucedida!")
+    except Exception as e:
+        print(f"Erro: {e}")
