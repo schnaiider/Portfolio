@@ -35,4 +35,4 @@ def anacFile(listProcessFiles):
     for files in listProcessFiles:
         df = read.readFileZip(files.fullPath, f"basica_{files.period}.zip",config['SaveAs']['saveAsPath'],';','"','latin1')
         if df is not None and not df.empty:
-            return df
+            return df,files.fullPath,files.period,files.year

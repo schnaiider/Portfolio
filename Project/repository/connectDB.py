@@ -27,6 +27,7 @@ def createConnection():
         return engine.connect()
     except pyodbc.Error as e:
             print(f"Erro de conexão: {e}")
+
 def closeConnection():
     global _conn
     try:
@@ -40,6 +41,7 @@ def closeConnection():
 def executeQuery(query: str):
     with dbConnect() as conn:
         resultados = conn.execute(text(query)).fetchall()
+        conn.commit()
         return resultados
     
 def blkInsert(tabela: str, dfInsert: any):
@@ -49,6 +51,19 @@ def blkInsert(tabela: str, dfInsert: any):
             conn.execute(text(f"DROP TABLE IF EXISTS ANACBR.{tabela}"))
             dfInsert.to_sql(tabela_formatada, conn, schema="ANACBR", if_exists='replace', index=False)
             conn.commit()
-            print("Inserção bem-sucedida!")
+            print(f"Inserção bem-sucedida! : {tabela}")
+            
     except Exception as e:
+        closeConnection()
         print(f"Erro: {e}")
+
+def executeProc(procName: str, params: int):
+    query = f"CALL {procName}({params})"
+    try:
+        with dbConnect() as conn:
+            resultados = conn.execute(text(query)).fetchone()
+            conn.commit()
+        return resultados
+    except Exception as e:
+        print(f"Erro ao executar o procedimento armazenado {procName}: {e}")
+        raise
